@@ -1,6 +1,7 @@
 const db = require('../../database/dbConfig')
 
 module.exports = {
+    getExps,
     editExp,
     deleteExp,
     findExpBy,
@@ -12,9 +13,11 @@ module.exports = {
 //         .insert(exp)
 // }
 
-// function getExps() {
-//     return db('experiences')
-// }
+function getExps() {
+    return db('organizers')
+    .innerJoin('experiences', 'organizers.id', 'experiences.org_id')
+    .select('organizers.org_name', 'experiences.experience_title', 'experiences.experience_desc', 'experiences.date', 'experiences.image')
+}
 
 function editExp(changes, id) {
     return db('experiences')

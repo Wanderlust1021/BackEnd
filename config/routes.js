@@ -18,10 +18,11 @@ module.exports = server => {
     server.post('/api/org/register', validateAccount, orgRegister);
     server.post('/api/org/login', orgLogin);
     server.get('/api/org', authenticate, getOrgs);
-    server.get('/api/exp/:id', getExps);
+    server.get('/api/exp', userGetExp)
+    server.get('/api/exp/:id', authenticate, getExps);
     server.post('/api/org/:id/exp', authenticate, addExp);
-    // server.put('/api/experiences', authenticate, editExp);
-    // server.delete('/api/experiences', authenticate, deleteExp);
+    server.put('/api/exp/:id', authenticate, editExp);
+    server.delete('/api/exp/:id', authenticate, deleteExp);
 }
 
 //TESTING AND GENERATE TOKEN
@@ -169,6 +170,18 @@ function getExps(req, res) {
 }
 
 //WORKING
+function userGetExp(req, res) {
+    Exp.getExps()
+        .then(expList => {
+            res.status(201).json(expList)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+        })
+}
+
+//WORKING
 function addExp(req, res) {
     const exp = req.body;
     const { id } = req.params;
@@ -179,6 +192,34 @@ function addExp(req, res) {
         })
         .catch(err => {
             console.log('addExp', err)
+            res.status(500).json(err)
+        })
+}
+
+//WORKING
+function editExp(req, res) {
+    const expChanges = req.body;
+    const { id } = req.params;
+
+    Exp.editExp(expChanges, id)
+        .then(update => {
+            res.status(201).json({ message: 'Experience has been updated!' })
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+        })
+}  
+
+//WORKING
+function deleteExp(req, res) {
+    const { id } = req.params
+
+    Exp.deleteExp(id)
+        .then(newList => {
+            res.status(201).json({ message: 'Experience has been deleted' })
+        })
+        .catch(err => {
             res.status(500).json(err)
         })
 }
