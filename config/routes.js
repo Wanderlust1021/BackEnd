@@ -18,10 +18,11 @@ module.exports = server => {
     server.post('/api/org/register', validateAccount, orgRegister);
     server.post('/api/org/login', orgLogin);
     server.get('/api/org', authenticate, getOrgs);
-    server.get('/api/exp', getExps);
-    // server.post('/api/experiences', authenticate, addExp);
-    // server.put('/api/experiences', authenticate, editExp);
-    // server.delete('/api/experiences', authenticate, deleteExp);
+    server.get('/api/exp', userGetExp)
+    server.get('/api/exp/:id', authenticate, getExps);
+    server.post('/api/org/:id/exp', authenticate, addExp);
+    server.put('/api/exp/:id', authenticate, editExp);
+    server.delete('/api/exp/:id', authenticate, deleteExp);
 }
 
 //TESTING AND GENERATE TOKEN
@@ -110,6 +111,7 @@ function orgRegister(req, res) {
             res.status(201).json(saved);
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json(err)
         })
 };
@@ -134,29 +136,90 @@ function orgLogin(req, res) {
             }
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({ message: 'Not Working!'})
         })
 };
 
 //WORKING
 function getOrgs(req, res) {
+
     Org.getOrgs()
         .then(orgList => {
             res.status(201).json(orgList);
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json(err);
         })
 };
 
 //EXP ENDPOINTS
+//WORKING
 function getExps(req, res) {
-    Exp.getExps()
+    const { id } = req.params;
+
+    Org.getExps(id)
         .then(expList => {
             res.status(201).json(expList);
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+        })
+}
+
+//WORKING
+function userGetExp(req, res) {
+    Exp.getExps()
+        .then(expList => {
+            res.status(201).json(expList)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+        })
+}
+
+//WORKING
+function addExp(req, res) {
+    const exp = req.body;
+    const { id } = req.params;
+
+    Org.addExp(exp, id)
+        .then(exp => {
+            res.status(201).json(exp)
+        })
+        .catch(err => {
+            console.log('addExp', err)
+            res.status(500).json(err)
+        })
+}
+
+//WORKING
+function editExp(req, res) {
+    const expChanges = req.body;
+    const { id } = req.params;
+
+    Exp.editExp(expChanges, id)
+        .then(update => {
+            res.status(201).json({ message: 'Experience has been updated!' })
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+        })
+}  
+
+//WORKING
+function deleteExp(req, res) {
+    const { id } = req.params
+
+    Exp.deleteExp(id)
+        .then(newList => {
+            res.status(201).json({ message: 'Experience has been deleted' })
         })
         .catch(err => {
             res.status(500).json(err)
         })
 }
-
