@@ -19,7 +19,7 @@ module.exports = server => {
     server.post('/api/org/login', orgLogin);
     server.get('/api/org', authenticate, getOrgs);
     server.get('/api/exp', getExps);
-    // server.post('/api/experiences', authenticate, addExp);
+    server.post('/api/exp', authenticate, addExp);
     // server.put('/api/experiences', authenticate, editExp);
     // server.delete('/api/experiences', authenticate, deleteExp);
 }
@@ -110,6 +110,7 @@ function orgRegister(req, res) {
             res.status(201).json(saved);
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json(err)
         })
 };
@@ -134,6 +135,7 @@ function orgLogin(req, res) {
             }
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({ message: 'Not Working!'})
         })
 };
@@ -145,18 +147,33 @@ function getOrgs(req, res) {
             res.status(201).json(orgList);
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json(err);
         })
 };
 
 //EXP ENDPOINTS
+//WORKING
 function getExps(req, res) {
     Exp.getExps()
         .then(expList => {
             res.status(201).json(expList);
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json(err)
         })
 }
 
+function addExp(req, res) {
+    const exp = req.body;
+
+    Exp.addExp(exp)
+        .then(saved => {
+            res.status(201).json(saved)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+        })
+}
