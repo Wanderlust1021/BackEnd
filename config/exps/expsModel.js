@@ -1,22 +1,20 @@
 const db = require('../../database/dbConfig')
 
 module.exports = {
-    addExp,
-    getExps,
     editExp,
     deleteExp,
     findExpBy,
     findExpById
 }
 
-function addExp(exp) {
-    return db('experiences')
-        .insert(exp)
-}
+// function addExp(exp) {
+//     return db('experiences')
+//         .insert(exp)
+// }
 
-function getExps() {
-    return db('experiences')
-}
+// function getExps() {
+//     return db('experiences')
+// }
 
 function editExp(changes, id) {
     return db('experiences')

@@ -18,8 +18,8 @@ module.exports = server => {
     server.post('/api/org/register', validateAccount, orgRegister);
     server.post('/api/org/login', orgLogin);
     server.get('/api/org', authenticate, getOrgs);
-    server.get('/api/exp', getExps);
-    server.post('/api/exp', authenticate, addExp);
+    server.get('/api/exp/:id', getExps);
+    server.post('/api/org/:id/exp', authenticate, addExp);
     // server.put('/api/experiences', authenticate, editExp);
     // server.delete('/api/experiences', authenticate, deleteExp);
 }
@@ -142,6 +142,7 @@ function orgLogin(req, res) {
 
 //WORKING
 function getOrgs(req, res) {
+
     Org.getOrgs()
         .then(orgList => {
             res.status(201).json(orgList);
@@ -155,7 +156,9 @@ function getOrgs(req, res) {
 //EXP ENDPOINTS
 //WORKING
 function getExps(req, res) {
-    Exp.getExps()
+    const { id } = req.params;
+
+    Org.getExps(id)
         .then(expList => {
             res.status(201).json(expList);
         })
@@ -165,15 +168,17 @@ function getExps(req, res) {
         })
 }
 
+//WORKING
 function addExp(req, res) {
     const exp = req.body;
+    const { id } = req.params;
 
-    Exp.addExp(exp)
-        .then(saved => {
-            res.status(201).json(saved)
+    Org.addExp(exp, id)
+        .then(exp => {
+            res.status(201).json(exp)
         })
         .catch(err => {
-            console.log(err)
+            console.log('addExp', err)
             res.status(500).json(err)
         })
 }
