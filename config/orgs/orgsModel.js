@@ -38,8 +38,8 @@ function addExp(exp, org_id) {
 }
 
 function getExps(id) {
-    return db('organizers')
-        .innerJoin('experiences', 'organizers.id', 'experiences.org_id')
+    return db('organizers as o')
+        .innerJoin('experiences as e', 'o.id', 'e.org_id')
         .where({ org_id: id })
-        .select('organizers.org_name', 'experiences.experience_title', 'experiences.experience_desc', 'experiences.date', 'experiences.image')
+        .select('o.org_name', 'e.id', 'e.experience_title', 'e.experience_desc', 'e.date', 'e.image')
 }
