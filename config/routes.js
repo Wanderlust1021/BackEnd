@@ -59,6 +59,7 @@ function userRegister(req, res) {
             res.status(201).json(saved);
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json(err)
         })
 };
@@ -73,7 +74,7 @@ function userLogin(req, res) {
             if (user && bcrypt.compareSync(password, user.password)) {
                 const token = generateToken(user);
                     res.status(200).json({
-                        message: `Welcome ${user.username}`,
+                        user,
                         token
                     });
             }   else {
@@ -126,7 +127,7 @@ function orgLogin(req, res) {
             if (org && bcrypt.compareSync(password, org.password)) {
                 const token = generateToken(org);
                     res.status(200).json({
-                        message: `Welcome ${org.org_name}`,
+                        org,
                         token
                     });
             }   else {

@@ -32,6 +32,8 @@ exports.up = function(knex) {
           .inTable('organizers')
           .onUpdate('CASCADE')
           .onDelete('CASCADE');
+        exp 
+          
         exp
           .string('experience_title', 128)
           .notNullable();
