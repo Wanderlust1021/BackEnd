@@ -8,11 +8,6 @@ module.exports = {
     findExpById
 }
 
-// function addExp(exp) {
-//     return db('experiences')
-//         .insert(exp)
-// }
-
 function getExps() {
     return db('organizers')
     .innerJoin('experiences', 'organizers.id', 'experiences.org_id')
