@@ -18,7 +18,7 @@
     "heroku": "^7.33.3",
     "jest": "^24.8.0",
     "jsonwebtoken": "^8.5.1",
-    "knex": ">=0.19.5",
+    "knex": ">=2.4.0",
     "sqlite3": "^4.0.8"
   },
   "devDependencies": {
